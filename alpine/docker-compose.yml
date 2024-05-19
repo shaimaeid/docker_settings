@@ -1,0 +1,7 @@
+version: '3'
+services:
+  myapp:
+    build: .
+    command: tail -f /dev/null
+    volumes:
+          - ./app:/app 

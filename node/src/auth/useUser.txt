@@ -1,0 +1,31 @@
+/*
+Custom hook object
+*/
+import { useState, useEffect } from 'react';
+import { useToken } from './useToken';
+// custom hook to set and get the user from the received token
+export const useUser = () => {
+    // read token value
+    const [token] = useToken();
+
+    // setting token in local storage
+    const getPayloadFromToken = token => {
+        //read payload (the middle part of the token) by splitting then parsing and decode
+        const encodePayLoad = token.split('|')[1];
+        return JSON.parse(atob(encodePayLoad));
+    }
+    const [user, setUser] = useState(() => {
+        if (!token) return null;
+        return getPayloadFromToken(token);
+    });
+    useEffect(() => {
+        if (!token) {
+            setUser(null);
+        } else {
+            setUser(getPayloadFromToken(token));
+        }
+
+    }, [token]);
+    // return token object and set function
+    return [user, setUser];
+}
